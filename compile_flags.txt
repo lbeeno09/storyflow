@@ -1,0 +1,4 @@
+-xc++
+-IC:/vcpkg/packages/glfw3_x64-windows/include
+-IC:/vcpkg/packages/imgui_x64-windows/include
+-std=c++20
