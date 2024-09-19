@@ -1,2 +1,3 @@
 # Ignore build files
 build/**
+vcpkg_installed/**
