@@ -1,0 +1,12 @@
+{
+  "name": "Story Flow",
+  "dependencies": [
+    "glfw3",
+    {
+      "name": "imgui",
+      "features": ["docking-experimental", "glfw-binding", "opengl3-binding"]
+    },
+    "freetype",
+    "nlohmann-json"
+  ]
+}
