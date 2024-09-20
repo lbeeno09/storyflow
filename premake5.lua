@@ -1,45 +1,45 @@
-workspace "StoryFlow"
-configurations { "Debug", "Release" }
-architecture "x64"
+if _ACTION == "vs2022" then
+  workspace "StoryFlow"
+  location("build/VS")
+  configurations { "Debug", "Release" }
+  architecture "x64"
 
-targetdir("build/bin/%{cfg.buildcfg}")
-objdir("build/bin-int/%{cfg.buildcfg}")
+  targetdir("build/bin/%{cfg.buildcfg}")
+  objdir("build/bin-int/%{cfg.buildcfg}")
 
-filter "system:windows"
-includedirs {
-  os.getenv("VCPKG_PATH") .. "/packages/glfw3_x64-windows/include",
-  os.getenv("VCPKG_PATH") .. "/packages/imgui_x64-windows/include",
-  "src"
-}
-libdirs {
-  os.getenv("VCPKG_PATH") .. "/packages/glfw3_x64-windows/lib",
-  os.getenv("VCPKG_PATH") .. "/packages/imgui_x64-windows/lib",
-}
-links {
-  "opengl32",
-  "glfw3dll",
-  "imgui",
-}
-defines { "WIN32" }
+  project "StoryFlow"
+  kind "ConsoleApp"
+  language "C++"
+  cppdialect "C++20"
 
-filter "configurations:Debug"
-defines { "DEBUG" }
-symbols "On"
+  location "build/VS"
+  defines { "WIN32" }
 
-filter "configurations:Release"
-defines { "NDEBUG" }
-optimize "On"
+  includedirs {
+    "vcpkg_installed/x64-windows/x64-windows/include",
+    "src"
+  }
+  libdirs {
+    "vcpkg_installed/x64-windows/x64-windows/lib",
+  }
+  links {
+    "opengl32",
+    "glfw3dll",
+    "imgui",
+    "freetype"
+  }
+  files {
+    "src/*.cpp",
+    "src/*.h"
+  }
 
-filter "action:vs*"
-location "build/VS"
+  filter "configurations:Debug"
+  defines { "DEBUG" }
+  symbols "On"
 
-project "StoryFlow"
-kind "ConsoleApp"
-language "C++"
-cppdialect "C++20"
-
-
-files {
-  "src/*.cpp",
-  "src/*.h"
-}
+  filter "configurations:Release"
+  defines { "NDEBUG" }
+  optimize "On"
+elseif _ACTION == "clean" then
+  print("TBD: cleaning procedure")
+end
