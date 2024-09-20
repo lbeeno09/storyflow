@@ -1,5 +1,5 @@
 {
-  "name": "Story Flow",
+  "name": "story-flow",
   "dependencies": [
     "glfw3",
     {
