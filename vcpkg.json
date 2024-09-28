@@ -1,12 +1,26 @@
 {
-  "name": "story-flow",
-  "dependencies": [
-    "glfw3",
-    {
-      "name": "imgui",
-      "features": ["docking-experimental", "glfw-binding", "opengl3-binding"]
-    },
-    "freetype",
-    "nlohmann-json"
-  ]
+	"name": "story-flow",
+	"dependencies": [
+		{
+			"name": "glfw3",
+			"features": []
+		},
+		{
+			"name": "imgui",
+			"features": [
+				"docking-experimental",
+				"freetype",
+				"glfw-binding",
+				"opengl3-binding"
+			]
+		},
+		{
+			"name": "freetype",
+			"features": []
+		},
+		{
+			"name": "nlohmann-json",
+			"features": []
+		}
+	]
 }
