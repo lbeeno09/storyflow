@@ -1,79 +1,59 @@
 #include "App.h"
-#include "UI.h"
 
-#include <GLFW/glfw3.h>
+App::App() { }
 
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
-
-static void glfwErrorCallback(int error, const char *description)
-{
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
-
-App::App() : window_(nullptr), ui_(nullptr)
-{
-    init();
-}
-
-App::~App()
-{
-    cleanup();
-}
-
-void App::run()
-{
-    render();
-}
+App::~App() { }
 
 void App::init()
 {
-    glfwSetErrorCallback(glfwErrorCallback);
-    if (!glfwInit())
-    {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    // Decide GL+GLSL versions #version 330
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-    // Create windows with graphics context
-    window_ = glfwCreateWindow(1280, 720, "Story Flow", nullptr, nullptr);
-    if (!window_)
-    {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    glfwMakeContextCurrent(window_);
-    glfwSwapInterval(1);
-
-    // Setup Dear ImGui context
-    ui_ = new UI(window_);
+	// Our state
+	showDemoWindow_ = true;
+	showAnotherWindow_ = false;
 }
 
-void App::render()
+void App::update()
 {
-    while (!glfwWindowShouldClose(window_))
-    {
-        glfwPollEvents();
+	if(showDemoWindow_)
+	{
+		ImGui::ShowDemoWindow(&showDemoWindow_);
+	}
 
-        ui_->newFrame();
-        ui_->render();
-        ui_->endFrame();
+	{
+		static float f = 0.0f;
+		static int counter = 0;
 
-        glfwSwapBuffers(window_);
-    }
-}
+		ImGui::Begin("Hello, world!");
 
-void App::cleanup()
-{
-    delete ui_;
-    glfwDestroyWindow(window_);
-    glfwTerminate();
+		ImGui::Text("This is some useful text.");
+		ImGui::Checkbox("Demo Window", &showDemoWindow_);
+		ImGui::Checkbox("Another Window", &showAnotherWindow_);
+
+		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+		ImGui::ColorEdit3("clear color", (float *)&clearColor_);
+
+		if(ImGui::Button("Button"))
+		{
+			counter++;
+		}
+		ImGui::SameLine();
+		ImGui::Text("counter = %d", counter);
+
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		ImGui::End();
+	}
+
+	if(showAnotherWindow_)
+	{
+		ImGui::Begin("Another Window", &showAnotherWindow_);
+
+		ImGui::Text("Hello from another window!");
+		if(ImGui::Button("Close Me"))
+		{
+			showAnotherWindow_ = false;
+		}
+
+		ImGui::End();
+	}
+
 }

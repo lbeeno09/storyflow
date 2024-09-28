@@ -1,10 +1,10 @@
 #include "App.h"
 
-int main()
+int main(int, char **)
 {
-    App app;
+	App app;
 
-    app.run();
+	app.run();
 
-    return 0;
+	return 0;
 }

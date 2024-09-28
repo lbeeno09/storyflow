@@ -1,21 +1,18 @@
-#pragma once
+#include "AppBase.h"
 
-#include "UI.h"
-#include <GLFW/glfw3.h>
-
-class App
+class App : public AppBase
 {
 public:
-    void run();
+	App();
 
-    App();
-    ~App();
+	~App() override;
+
+	void init() override;
+
+	void update() override;
 
 private:
-    void init();
-    void render();
-    void cleanup();
-
-    GLFWwindow *window_;
-    UI *ui_;
+	// Our state
+	bool showDemoWindow_;
+	bool showAnotherWindow_;
 };
