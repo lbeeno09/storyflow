@@ -1,10 +1,10 @@
 #include "AppBase.h"
+#include <string>
 
 class App : public AppBase
 {
 public:
 	App();
-
 	~App() override;
 
 	void init() override;
@@ -12,7 +12,9 @@ public:
 	void update() override;
 
 private:
+	void showMenuBar();
+
 	// Our state
 	bool showDemoWindow_;
-	bool showAnotherWindow_;
+	std::string textBuffer;
 };

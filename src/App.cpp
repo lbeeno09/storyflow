@@ -1,59 +1,57 @@
 #include "App.h"
+#include <string>
 
-App::App() { }
+void ResizeBuffer(std::string &buffer, size_t newSize)
+{
+	if(newSize > buffer.size())
+	{
+		buffer.resize(newSize);
+	}
+}
 
-App::~App() { }
+App::App() : showDemoWindow_(false), textBuffer("")
+{ }
+
+App::~App()
+{ }
 
 void App::init()
-{
-	// Our state
-	showDemoWindow_ = true;
-	showAnotherWindow_ = false;
-}
+{ }
 
 void App::update()
 {
+	// Enable docking 
+	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
+
+	showMenuBar();
+
+	// sidebar for different modes
+	{
+		ImGui::Begin("Side Bar");
+
+		ImGui::Text("Side bar menu");
+
+		ImGui::End();
+	}
+
 	if(showDemoWindow_)
 	{
 		ImGui::ShowDemoWindow(&showDemoWindow_);
 	}
 
 	{
-		static float f = 0.0f;
-		static int counter = 0;
+		ImGui::Begin("Story");
 
-		ImGui::Begin("Hello, world!");
+		ImGui::InputTextMultiline("##StoryLine", &textBuffer[0], textBuffer.size(), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16), ImGuiInputTextFlags_AllowTabInput);
 
-		ImGui::Text("This is some useful text.");
-		ImGui::Checkbox("Demo Window", &showDemoWindow_);
-		ImGui::Checkbox("Another Window", &showAnotherWindow_);
-
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-		ImGui::ColorEdit3("clear color", (float *)&clearColor_);
-
-		if(ImGui::Button("Button"))
+		if(ImGui::IsItemActive() || ImGui::IsItemFocused())
 		{
-			counter++;
-		}
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-		ImGui::End();
-	}
-
-	if(showAnotherWindow_)
-	{
-		ImGui::Begin("Another Window", &showAnotherWindow_);
-
-		ImGui::Text("Hello from another window!");
-		if(ImGui::Button("Close Me"))
-		{
-			showAnotherWindow_ = false;
+			if(ImGui::GetIO().KeysDown[ImGuiKey_Enter] || ImGui::GetIO().KeysDown[ImGuiKey_Tab])
+			{
+				ResizeBuffer(textBuffer, textBuffer.size() + 1024);
+			}
 		}
 
 		ImGui::End();
 	}
-
 }
